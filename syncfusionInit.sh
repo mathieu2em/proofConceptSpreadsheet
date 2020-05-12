@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# before doing this be sure to do habitual Angular CLI project creation
+# commands
+
 npm install @syncfusion/ej2-angular-spreadsheet --save
 npm i @angular/common@9.1.3
 npm i @angular/compiler@9.1.3
