@@ -2,7 +2,7 @@
 
 document for POC comparisons : 
 
-https://docs.google.com/document/d/1hNvBjRPaRsQwz1aic9QRIaHkgtxgOrYTFPOfvpVKuV0/edit#
+https://docs.google.com/document/d/1hNvBjRPaRsQwz1aic9QRIaHkgtxgOrYTFPOfvpVKuV0/edit?usp=sharing
 
 grid for functionnalities : 
 
