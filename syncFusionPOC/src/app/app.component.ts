@@ -6,5 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'syncFusionPOC';
+  title:string = 'syncFusionPOC';
+  editVal:boolean = true;
+
+  changeEdit() {
+    this.editVal = !this.editVal;
+    console.log(this.editVal);
+  } 
 }
+
