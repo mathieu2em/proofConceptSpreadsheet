@@ -1,5 +1,6 @@
 <!-- the openUrl link will be modified to an Edilex service -->
 <!-- the saveUrl link will be modified to an Edilex service -->
+<hr>
 <div ng-app="app-root">
     <ejs-spreadsheet openUrl='https://ej2services.syncfusion.com/production/web-services/api/spreadsheet/open' 
                      saveUrl='https://ej2services.syncfusion.com/production/web-services/api/spreadsheet/save' 
@@ -10,5 +11,8 @@
             </e-sheet>
         </e-sheets>
     </ejs-spreadsheet>
-    <button mat-button color="primary" (click)="changeEdit()">edit</button>
+    <hr>
+    <div id = "button">
+        <button mat-raised-button color="warn" routerLink="/page1">Am Done I SuCh very ArTiSt</button>
+    </div>   
 </div>
