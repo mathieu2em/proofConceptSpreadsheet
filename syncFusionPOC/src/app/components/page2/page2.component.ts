@@ -11,5 +11,10 @@ export class Page2Component implements OnInit {
 
   ngOnInit(): void {
   }
+  editVal:boolean = true;
 
+  changeEdit() {
+    this.editVal = !this.editVal;
+    console.log(this.editVal);
+  } 
 }

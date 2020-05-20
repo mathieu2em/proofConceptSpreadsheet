@@ -7,11 +7,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title:string = 'syncFusionPOC';
-  editVal:boolean = true;
-
-  changeEdit() {
-    this.editVal = !this.editVal;
-    console.log(this.editVal);
-  } 
 }
 
