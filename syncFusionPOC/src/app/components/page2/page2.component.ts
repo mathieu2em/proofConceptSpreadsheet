@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { SpreadsheetComponent } from '@syncfusion/ej2-angular-spreadsheet';
+import { DataManager, Query } from '@syncfusion/ej2-data';
 
 @Component({
   selector: 'app-page2',
@@ -9,12 +11,14 @@ export class Page2Component implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
-  editVal:boolean = true;
+  @ViewChild('spreadsheet') public spreadsheetObj: SpreadsheetComponent;
+    public query: Query = new Query().select(['OrderID', 'CustomerID', 'ShipName', 'ShipCity', 'ShipCountry', 'Freight']).take(200);
+    public data: DataManager = new DataManager({
+        url: 'https://js.syncfusion.com/demos/ejServices//wcf/Northwind.svc/Orders',
+        crossDomain: true
+    });
 
-  changeEdit() {
-    this.editVal = !this.editVal;
-    console.log(this.editVal);
-  } 
+  ngOnInit(): void {
+    this.data = this.data;
+  }
 }

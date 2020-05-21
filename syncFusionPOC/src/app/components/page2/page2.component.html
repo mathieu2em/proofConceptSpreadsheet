@@ -2,17 +2,42 @@
 <!-- the saveUrl link will be modified to an Edilex service -->
 <hr>
 <div ng-app="app-root">
-    <ejs-spreadsheet openUrl='https://ej2services.syncfusion.com/production/web-services/api/spreadsheet/open' 
-                     saveUrl='https://ej2services.syncfusion.com/production/web-services/api/spreadsheet/save' 
-                     [allowEditing] = true
-                     >
+    <ejs-spreadsheet #spreadsheet>
         <e-sheets>
-            <e-sheet name="Budget" [isProtected]='editVal' [protectSettings]="{ selectCells: true }">
+            <e-sheet name='Shipment Details'>
+                <e-ranges>
+                    <e-range 
+                    [showFieldAsHeader]='false' 
+                    startCell='A2' 
+                    [dataSource]='data' 
+                    [query]='query'> 
+                </e-range>
+                </e-ranges>
+                <e-rows>
+                    <e-row>
+                        <e-cells>
+                            <e-cell value='Order ID'></e-cell>
+                            <e-cell value='Customer Name'></e-cell>
+                            <e-cell value='Freight'></e-cell>
+                            <e-cell value='Ship Name'></e-cell>
+                            <e-cell value='Ship City'></e-cell>
+                            <e-cell value='Ship Country'></e-cell>
+                        </e-cells>
+                    </e-row>
+                </e-rows>
+                <e-columns>
+                    <e-column [width]=100></e-column>
+                    <e-column [width]=130></e-column>
+                    <e-column [width]=100></e-column>
+                    <e-column [width]=220></e-column>
+                    <e-column [width]=150></e-column>
+                    <e-column [width]=180></e-column>
+                </e-columns>
             </e-sheet>
         </e-sheets>
     </ejs-spreadsheet>
     <hr>
-    <div id = "button">
+    <div id="button">
         <button mat-raised-button color="warn" routerLink="/page1">Am Done I SuCh very ArTiSt</button>
-    </div>   
+    </div>
 </div>
