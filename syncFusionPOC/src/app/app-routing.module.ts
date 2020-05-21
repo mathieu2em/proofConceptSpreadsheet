@@ -3,8 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { Page1Component } from './components/page1/page1.component';
 import { Page2Component } from './components/page2/page2.component';
-import { AppComponent }   from './app.component';
-
 
 const routes: Routes = [
   { path: '',      component: Page1Component },
