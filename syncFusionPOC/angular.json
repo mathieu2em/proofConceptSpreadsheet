@@ -41,7 +41,9 @@
               "./node_modules/@syncfusion/ej2-grids/styles/material.css"
 
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/jquery/dist/jquery.min.js" 
+            ]
           },
           "configurations": {
             "production": {
