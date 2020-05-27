@@ -1,5 +1,9 @@
+<h2>The editor</h2>
+<hr>
+<h3>Todo the buttons bar</h3>
+<hr>
 <gc-spread-sheets [backColor]="spreadBackColor" [hostStyle]="hostStyle" (workbookInitialized)="workbookInit($event)">
-    <gc-worksheet [name]="sheetName" [dataSource]="data">
+    <gc-worksheet [name]="sheetName">
          <gc-column dataField="Name" width=300></gc-column>
          <gc-column dataField="Category" [width]=columnWidth></gc-column>
          <gc-column dataField="Price" [width]=columnWidth formatter="$ #.00"></gc-column>
@@ -8,5 +12,5 @@
 </gc-spread-sheets>
 <hr>
 <div id = "button">
-     <button mat-raised-button color="warn" routerLink="/page1">Am Done I SuCh very ArTiSt</button>
-</div>   
+     <button mat-raised-button color="warn" (click)="onClickMe($event)">Save to clause</button>
+</div>
