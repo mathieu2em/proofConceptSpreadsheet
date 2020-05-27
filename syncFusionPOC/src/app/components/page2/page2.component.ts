@@ -3,6 +3,8 @@ import { SpreadsheetComponent } from '@syncfusion/ej2-angular-spreadsheet';
 import { DataManager, Query } from '@syncfusion/ej2-data';
 import { UpdaterService } from '../../services/updater.service';
 import { Router } from '@angular/router';
+import * as $ from 'jquery'; window["$"] = $; window["jQuery"] = $;
+import {  } from '@syncfusion/ej2-angular-base';
 
 @Component({
   selector: 'app-page2',
@@ -10,10 +12,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./page2.component.scss']
 })
 export class Page2Component implements OnInit, OnDestroy, AfterViewInit {
+  public show: boolean;
   //xlObj:Object;
   //( private readonly _spreadSheetService: SpreadSheetService
   constructor(private updaterService: UpdaterService,
-    private readonly _router: Router) { }
+    private readonly _router: Router) {
+      this.show=true;
+     }
 
   @ViewChild('ejs-spreadsheet') public spreadsheetObj: SpreadsheetComponent;
   public query: Query = new Query().select(['OrderID', 'CustomerID', 'ShipName', 'ShipCity', 'ShipCountry', 'Freight']).take(200);
@@ -35,6 +40,7 @@ export class Page2Component implements OnInit, OnDestroy, AfterViewInit {
     // this._subscriptions.unsubscribe();
   }
 
+  /*
   // public vu que referee dans un template
   public saveSpreadsheet($event: Event): void {
     // cest ici quon va appeler le service yeah yeah
@@ -56,12 +62,13 @@ export class Page2Component implements OnInit, OnDestroy, AfterViewInit {
         }
       );
   }
+  */
 
+  /*
   saveAsFile() {
     var xlObj = $("#spreadsheet").data("ejSpreadsheet");
     xlObj.XLExport["export"](ej.Spreadsheet.exportType.Excel);
   }
-
 
   private saveAsJson(): any {
     this.spreadsheetObj.saveAsJson()
@@ -71,5 +78,16 @@ export class Page2Component implements OnInit, OnDestroy, AfterViewInit {
       .finally(() => {
         alert('Promise ready');
       })
+    }
+    */
+   /*
+   hideMenu() {
+    this.show = false;
+  }*/
+  hideMenu() {
+    $("#Spreadsheet").ejSpreadsheet("instance").XLRibbon.hideMenu();
+  }
+   showMenu() {
+    this.show = true;
   }
 }

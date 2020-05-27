@@ -2,7 +2,7 @@
 <!-- the saveUrl link will be modified to an Edilex service -->
 <hr>
 <div ng-app="app-root">
-    <ejs-spreadsheet #spreadsheet id="spreadsheet">
+    <ejs-spreadsheet #spreadsheet id="spreadsheet"  [showRibbon]="show">
         <e-sheets>
             <e-sheet name='Shipment Details'>
                 <e-ranges>
@@ -39,10 +39,12 @@
     <hr>
     <div id="button">
         <!-- TODO changer routerlink pour le mettre dans la fonction -->
-        <button mat-raised-button color="warn" (click)="saveSpreadsheet($event)" >Am Done I SuCh very ArTiSt</button>
+        <button mat-raised-button color="warn" (click)="hideMenu()" >Hide</button>
+        <button mat-raised-button color="warn" (click)="showMenu()" >Show</button>
     </div>
+    <!-- TODO -->
+    TODO
     <input type="text" id="fileName" />
     <input type="button" value="Save as Excel" onclick="saveAsExcel()" />
     <input type="button" value="Load Excel" onclick="loadExcel()" />
-    <div id="Spreadsheet"></div>
 </div>

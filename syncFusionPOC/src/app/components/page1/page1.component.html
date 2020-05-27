@@ -1,10 +1,15 @@
 
 <div>
     <h1>ULTIMATE SUPER VIKING NINJA SYNCFUSION POC</h1>
-    <button mat-raised-button color="warn" routerLink="/page2">create a spreadsheet</button>
+    <button mat-raised-button color="warn" routerLink="/page2">switch</button>
 </div>
 <hr>
 <div>
-    ici sera affiché le spreadsheet en read-only
+    <ejs-spreadsheet #spreadsheet id="spreadsheet">
+        <e-sheets>
+            <e-sheet name='tester sheet'>
+            </e-sheet>
+        </e-sheets>
+    </ejs-spreadsheet>
 </div>
 <hr>
