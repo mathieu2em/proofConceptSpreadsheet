@@ -12,5 +12,6 @@
 </gc-spread-sheets>
 <hr>
 <div id = "button">
-     <button mat-raised-button color="warn" (click)="onClickMe($event)">Save to clause</button>
+     <button mat-raised-button color="warn" (click)="onClickMe($event)">Save to clause</button> <input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onClickMeImport($event)" />
 </div>
+

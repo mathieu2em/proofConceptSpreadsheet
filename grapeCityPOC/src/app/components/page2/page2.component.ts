@@ -41,7 +41,7 @@ export class Page2Component implements OnInit {
     const self = this;
     self.spread = args.spread;
     let sheet =  this.spread.getActiveSheet();
-    sheet.getCell(0,0).text("cet Individu").foreColor("blue");
+    //sheet.getCell(0,0).text("cet Individu").foreColor("blue");
     sheet.setRowCount(6);
   }
   onClickMe(args) {
@@ -49,6 +49,19 @@ export class Page2Component implements OnInit {
     const json = JSON.stringify(self.spread.toJSON(true));
     alert(json);
     this.goToComponentB(json);
+  }
+  onClickMeImport(args) {
+    const self = this, file = args.srcElement && args.srcElement.files && args.srcElement.files[0];
+    if (self.spread && file) {
+      self.excelIO.open(file, (json) => {
+        self.spread.fromJSON(json, {});
+        setTimeout(() => {
+          alert('load successfully');
+        }, 0);
+      }, (error) => {
+        alert('load fail');
+      });
+    }
   }
   goToComponentB(passedObj: Object): void {
     this._router.navigate(['/page1'], {state: {data: passedObj}});
