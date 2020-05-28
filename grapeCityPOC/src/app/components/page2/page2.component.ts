@@ -76,6 +76,24 @@ export class Page2Component implements OnInit {
     const sheet = this.spread.getActiveSheet();
     sheet.addColumns(sheet.getColumnCount(),1);
   }
+
+  addRowBtn(){
+    const sheet = this.spread.getActiveSheet();
+    sheet.addRows(sheet.getColumnCount(),1);
+  }
+
+  // add borders to selected cells 
+  addBorders(){
+    const sheet = this.spread.getActiveSheet();
+    const sels = sheet.getSelections()[0];
+    const border = new GC.Spread.Sheets.LineBorder("black",GC.Spread.Sheets.LineStyle.medium);
+    const selection = sheet.getRange(sels.row, sels.col, sels.rowCount, sels.colCount);
+    selection.borderTop(border);
+    selection.borderBottom(border);
+    selection.borderLeft(border);
+    selection.borderRight(border);
+  }
+
   // get the sum of row heights in pixel
   getRowHeightSum(sheet:  GC.Spread.Sheets.Worksheet){
     let height = 0;
@@ -118,16 +136,14 @@ export class Page2Component implements OnInit {
     //sheet.options.isProtected = true;
   }
 
+  // add the selected cell to an array that will be used as a selection 
+  // for cells to unlock in page 1
   unlockCells() {
     let sheet = this.spread.getActiveSheet();
     let sels = sheet.getSelections();
     console.log(sels[0]);
     this.editableCells.push(sels[0]);
-    
-    
-  
   }
-
 
   deactivateScrolling(sheet: GC.Spread.Sheets.Worksheet){
     const rc = sheet.getRowCount();
