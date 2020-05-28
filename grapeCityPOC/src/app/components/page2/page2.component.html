@@ -2,6 +2,7 @@
 <hr>
 <h3>Todo the buttons bar</h3>
 <button mat-raised-button color="warn" (click)="addColumnBtn()">add column</button>
+<button mat-raised-button color="warn" (click)="unlockCells()">unlock cells</button>
 <hr>
 <gc-spread-sheets [backColor]="spreadBackColor" [hostStyle]="hostStyle" (workbookInitialized)="workbookInit($event)">
     <gc-worksheet [name]="sheetName">

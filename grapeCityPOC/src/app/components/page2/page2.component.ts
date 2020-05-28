@@ -22,8 +22,12 @@ export class Page2Component implements OnInit {
   // les utilitaires pour l'import export
   private spread: GC.Spread.Sheets.Workbook;
   private excelIO;
+  private editableCells: GC.Spread.Sheets.Range[];
 
-  constructor( private readonly _router: Router ){ this.excelIO = new Excel.IO() }
+  constructor( private readonly _router: Router ){ 
+    this.excelIO = new Excel.IO();
+    this.editableCells = [];
+   }
   
   ngOnInit(): void {}
 
@@ -46,7 +50,7 @@ export class Page2Component implements OnInit {
     let width = this.getColWidthSum(sheet);
     let height = this.getRowHeightSum(sheet);
     this.goToComponentB( 
-      { json: json, width: width, height: height }
+      { json: json, width: width, height: height, sels : this.editableCells }
       );
   }
 
@@ -72,7 +76,7 @@ export class Page2Component implements OnInit {
     const sheet = this.spread.getActiveSheet();
     sheet.addColumns(sheet.getColumnCount(),1);
   }
-
+  // get the sum of row heights in pixel
   getRowHeightSum(sheet:  GC.Spread.Sheets.Worksheet){
     let height = 0;
     let nbrOfRows = sheet.getRowCount();
@@ -82,7 +86,7 @@ export class Page2Component implements OnInit {
     console.log(height);
     return height;
   }
-
+  // get the sum of column widths in pixel
   getColWidthSum(sheet:  GC.Spread.Sheets.Worksheet){
     let width = 0;
     let nbrOfColumns = sheet.getColumnCount();
@@ -90,5 +94,45 @@ export class Page2Component implements OnInit {
       width += sheet.getColumnWidth(i);
     }
     return width;
+  }
+  
+  setLimitedUse(spread: GC.Spread.Sheets.Workbook){
+    let sheet = spread.getActiveSheet();
+    // sheet.options.isProtected = true;
+    // Hide column headers.
+    //sheet.options.colHeaderVisible = false;
+    // Hide row headers.
+    //sheet.options.rowHeaderVisible = false;
+    // block editing completely
+    /*sheet.bind(GC.Spread.Sheets.Events.EditStarting, function (sender, args, e) {e.preventDefault()});*/
+    // block sheet adding
+    spread.options.newTabVisible = false;
+    //spread.options.showHorizontalScrollbar = false;
+    //spread.options.showVerticalScrollbar = false;
+    //spread.options.tabStripVisible = false;
+    //spread.options.allowUserDragMerge = false;
+    //spread.options.allowAutoCreateHyperlink = false;
+    //spread.options.allowContextMenu = false;
+    //spread.options.allowDynamicArray = false;
+    //this.deactivateScrolling(sheet);
+    //sheet.options.isProtected = true;
+  }
+
+  unlockCells() {
+    let sheet = this.spread.getActiveSheet();
+    let sels = sheet.getSelections();
+    console.log(sels[0]);
+    this.editableCells.push(sels[0]);
+    
+    
+  
+  }
+
+
+  deactivateScrolling(sheet: GC.Spread.Sheets.Worksheet){
+    const rc = sheet.getRowCount();
+    const cc = sheet.getColumnCount();
+    sheet.frozenRowCount(rc);
+    sheet.frozenColumnCount(cc);
   }
 }
