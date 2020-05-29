@@ -12,16 +12,16 @@ import { Router } from '@angular/router';
 
 export class Page2Component implements OnInit {
   // caracteristiques basiques du spreadsheet
-  spreadBackColor = 'aliceblue';
-  sheetName = 'people list';
-  hostStyle = {
+  spreadBackColor:string = 'aliceblue';
+  sheetName:string = 'people list';
+  hostStyle: object = {
     width: '800px',
     height: '300px'
   };
 
   // les utilitaires pour l'import export
   private spread: GC.Spread.Sheets.Workbook;
-  private excelIO;
+  private excelIO: Excel.IO;
   private editableCells: GC.Spread.Sheets.Range[];
 
   constructor( private readonly _router: Router ){ 
@@ -29,33 +29,31 @@ export class Page2Component implements OnInit {
     this.editableCells = [];
    }
   
-  ngOnInit(): void {}
+  ngOnInit():void {}
 
-  columnWidth = 100;
+  columnWidth:number = 100;
 
-  workbookInit(args){
+  workbookInit(args):void{
     this.spread = args.spread;
-    let sheet =  this.spread.getActiveSheet();
+    let sheet:GC.Spread.Sheets.Worksheet =  this.spread.getActiveSheet();
     //sheet.getCell(0,0).text("cet Individu").foreColor("blue");
     sheet.setRowCount(6);
     this.spread.options.allowUserDragMerge = true;
-    
   }
 
-  onClickMe(args) {
-    const self = this;
-    const json = JSON.stringify(self.spread.toJSON(true));
-    const sheet = this.spread.getActiveSheet();
+  onClickMe(args):void {
+    const json:string                      = JSON.stringify(this.spread.toJSON(true));
+    const sheet:GC.Spread.Sheets.Worksheet = this.spread.getActiveSheet();
     alert(json);
-    let width = this.getColWidthSum(sheet);
-    let height = this.getRowHeightSum(sheet);
+    let width:number = this.getColWidthSum(sheet);
+    let height:number = this.getRowHeightSum(sheet);
     this.goToComponentB( 
       { json: json, width: width, height: height, sels : this.editableCells }
       );
   }
 
-  onClickMeImport(args) {
-    const file = args.srcElement && args.srcElement.files && args.srcElement.files[0];
+  onClickMeImport(args):void {
+    const file: File = args.srcElement && args.srcElement.files && args.srcElement.files[0];
     if (this.spread && file) {
       this.excelIO.open(file, (json) => {
         this.spread.fromJSON(json, {});
@@ -72,22 +70,33 @@ export class Page2Component implements OnInit {
     this._router.navigate(['/page1'], {state: {data: passedObj}});
   }
     
-  addColumnBtn(){
-    const sheet = this.spread.getActiveSheet();
+  addColumnBtn():void{
+    const sheet:GC.Spread.Sheets.Worksheet = this.spread.getActiveSheet();
     sheet.addColumns(sheet.getColumnCount(),1);
   }
 
-  addRowBtn(){
-    const sheet = this.spread.getActiveSheet();
+  addRowBtn():void{
+    const sheet:GC.Spread.Sheets.Worksheet = this.spread.getActiveSheet();
     sheet.addRows(sheet.getColumnCount(),1);
   }
 
+  rmColumnBtn():void{
+    const sheet:GC.Spread.Sheets.Worksheet = this.spread.getActiveSheet();
+    sheet.deleteColumns(sheet.getColumnCount()-1,sheet.getColumnCount())
+  }
+
+  rmRowBtn():void{
+    const sheet:GC.Spread.Sheets.Worksheet = this.spread.getActiveSheet();
+    sheet.deleteRows(sheet.getRowCount()-1,sheet.getRowCount());
+  }
+
+
   // add borders to selected cells 
-  addBorders(){
-    const sheet = this.spread.getActiveSheet();
-    const sels = sheet.getSelections()[0];
-    const border = new GC.Spread.Sheets.LineBorder("black",GC.Spread.Sheets.LineStyle.medium);
-    const selection = sheet.getRange(sels.row, sels.col, sels.rowCount, sels.colCount);
+  addBorders():void{
+    const sheet:GC.Spread.Sheets.Worksheet     = this.spread.getActiveSheet();
+    const sels:GC.Spread.Sheets.Range          = sheet.getSelections()[0];
+    const border:GC.Spread.Sheets.LineBorder   = new GC.Spread.Sheets.LineBorder("black",GC.Spread.Sheets.LineStyle.medium);
+    const selection:GC.Spread.Sheets.CellRange = sheet.getRange(sels.row, sels.col, sels.rowCount, sels.colCount);
     selection.borderTop(border);
     selection.borderBottom(border);
     selection.borderLeft(border);
@@ -95,17 +104,17 @@ export class Page2Component implements OnInit {
   }
 
   // get the sum of row heights in pixel
-  getRowHeightSum(sheet:  GC.Spread.Sheets.Worksheet){
-    let height = 0;
-    let nbrOfRows = sheet.getRowCount();
-    for(let i=0; i<nbrOfRows; i++){
+  getRowHeightSum(sheet:  GC.Spread.Sheets.Worksheet):number{
+    let height:number = 0;
+    let nbrOfRows:number = sheet.getRowCount();
+    for(let i:number=0; i<nbrOfRows; i++){
       height += sheet.getRowHeight(i);
     }
     console.log(height);
     return height;
   }
   // get the sum of column widths in pixel
-  getColWidthSum(sheet:  GC.Spread.Sheets.Worksheet){
+  getColWidthSum(sheet:  GC.Spread.Sheets.Worksheet):number{
     let width = 0;
     let nbrOfColumns = sheet.getColumnCount();
     for(let i=0; i<nbrOfColumns; i++){
@@ -114,7 +123,7 @@ export class Page2Component implements OnInit {
     return width;
   }
   
-  setLimitedUse(spread: GC.Spread.Sheets.Workbook){
+  setLimitedUse(spread: GC.Spread.Sheets.Workbook):void{
     let sheet = spread.getActiveSheet();
     // sheet.options.isProtected = true;
     // Hide column headers.
@@ -138,16 +147,16 @@ export class Page2Component implements OnInit {
 
   // add the selected cell to an array that will be used as a selection 
   // for cells to unlock in page 1
-  unlockCells() {
-    let sheet = this.spread.getActiveSheet();
-    let sels = sheet.getSelections();
-    console.log(sels[0]);
+  unlockCells():void {
+    let sheet:GC.Spread.Sheets.Worksheet = this.spread.getActiveSheet();
+    let sels:GC.Spread.Sheets.Range[] = sheet.getSelections();
+    //console.log(sels[0]); // test
     this.editableCells.push(sels[0]);
   }
 
-  deactivateScrolling(sheet: GC.Spread.Sheets.Worksheet){
-    const rc = sheet.getRowCount();
-    const cc = sheet.getColumnCount();
+  deactivateScrolling(sheet: GC.Spread.Sheets.Worksheet):void{
+    const rc:number = sheet.getRowCount();
+    const cc:number = sheet.getColumnCount();
     sheet.frozenRowCount(rc);
     sheet.frozenColumnCount(cc);
   }

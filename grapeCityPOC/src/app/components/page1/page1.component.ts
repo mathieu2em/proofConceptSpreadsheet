@@ -105,6 +105,11 @@ export class Page1Component implements OnInit {
     spread.options.allowAutoCreateHyperlink = false;
     spread.options.allowContextMenu = false;
     spread.options.allowDynamicArray = false;
+    spread.options.allowSheetReorder = false;
+    spread.options.allowUserDragFill = false;
+    spread.options.allowUserDragMerge = false;
+    spread.options.allowUserResize = false;
+    spread.options.allowCopyPasteExcelStyle = false;
     sheet.options.isProtected = true;
     this.deactivateScrolling(sheet);
     sheet.options.protectionOptions = {
