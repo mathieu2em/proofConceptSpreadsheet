@@ -14,13 +14,13 @@ import { SelectorListContext } from '@angular/compiler';
 
 export class Page1Component implements OnInit {
   // contains the json value of the spreadsheet saved in page2
-  jsonString: string;
+  jsonString:string;
   
-  spreadBackColor = 'aliceblue';
-  hostStyle: any;
+  spreadBackColor:string = 'aliceblue';
+  hostStyle:any;
   
-  private spread: GC.Spread.Sheets.Workbook;
-  private excelIO;
+  private spread:GC.Spread.Sheets.Workbook;
+  private excelIO:Excel.IO;
   
   constructor() {
     this.excelIO = new Excel.IO();
@@ -29,10 +29,10 @@ export class Page1Component implements OnInit {
   ngOnInit(): void {
     if(!isUndefined(window.history.state.data)){
       this.jsonString = window.history.state.data.json;
-      const width = window.history.state.data.width.toString() + 'px';
-      const height = window.history.state.data.height.toString() + 'px';
-      console.log('result='+width+height);
-      console.log(this.jsonString)
+      const width:string = window.history.state.data.width.toString() + 'px';
+      const height:string = window.history.state.data.height.toString() + 'px';
+      //console.log('result='+width+height); //test
+      //console.log(this.jsonString) //test
       this.hostStyle = {
         width: width,
         height: height
@@ -45,9 +45,9 @@ export class Page1Component implements OnInit {
     }
   }
   
-  workbookInit(args) {
+  workbookInit(args):void {
     this.spread = args.spread;
-    let sheet = this.spread.getActiveSheet();
+    let sheet:GC.Spread.Sheets.Worksheet = this.spread.getActiveSheet();
     sheet.setRowCount(0);
     sheet.setColumnCount(0);
     if(!isUndefined(this.jsonString)){
@@ -69,21 +69,15 @@ export class Page1Component implements OnInit {
   }
   
   // use .fromJSON method on spreadsheet component to load table with data and formatting
-  onFileChange(args) {
-    const self = this
-    self.spread.fromJSON(JSON.parse(this.jsonString))
+  onFileChange(args):void {
+    this.spread.fromJSON(JSON.parse(this.jsonString))
   }
-  
-  tooltip(param: any) {
-    return `<span> ${param} </span>`;
-  }
-  
-  onClickMe(args) {
-    const self = this;
-    const filename = 'exportExcel.xlsx';
-    const json = JSON.stringify(self.spread.toJSON());
+
+  onClickMe(args):void {
+    const filename:string = 'exportExcel.xlsx';
+    const json:string = JSON.stringify(this.spread.toJSON());
     
-    self.excelIO.save(json, function (blob) {
+    this.excelIO.save(json, function (blob) {
       saveAs(blob, filename);
     }, function (e) {
       console.log(e);
@@ -91,8 +85,8 @@ export class Page1Component implements OnInit {
   }
 
   // set all the correct parameters for a usable read-only mode.
-  setReadonly(spread: GC.Spread.Sheets.Workbook){
-    const sheet = spread.getActiveSheet();
+  setReadonly(spread: GC.Spread.Sheets.Workbook):void{
+    const sheet:GC.Spread.Sheets.Worksheet = spread.getActiveSheet();
     //Hide column headers.
     sheet.options.colHeaderVisible = false;
     //Hide row headers.
@@ -131,20 +125,20 @@ export class Page1Component implements OnInit {
     if(!isUndefined(this.jsonString)) this.unlockCells(window.history.state.data.sels);
   }
 
-  adjustSize(spread: GC.Spread.Sheets.Workbook){
+  adjustSize(spread:GC.Spread.Sheets.Workbook):void{
     this.hostStyle.height = this.getRowHeightSum(spread.getActiveSheet()).toString();
   }
 
-  deactivateScrolling(sheet: GC.Spread.Sheets.Worksheet){
-    const rc = sheet.getRowCount();
-    const cc = sheet.getColumnCount();
+  deactivateScrolling(sheet:GC.Spread.Sheets.Worksheet):void{
+    const rc:number = sheet.getRowCount();
+    const cc:number = sheet.getColumnCount();
     sheet.frozenRowCount(rc);
     sheet.frozenColumnCount(cc);
   }
 
-  getRowHeightSum(sheet:  GC.Spread.Sheets.Worksheet){
-    let height = 0;
-    let nbrOfRows = sheet.getRowCount();
+  getRowHeightSum(sheet:GC.Spread.Sheets.Worksheet):number{
+    let height:number = 0;
+    let nbrOfRows:number = sheet.getRowCount();
     for(let i=0; i<nbrOfRows; i++){
       height += sheet.getRowHeight(i);
     }
@@ -152,9 +146,9 @@ export class Page1Component implements OnInit {
     return height;
   }
 
-  getColWidthSum(sheet:  GC.Spread.Sheets.Worksheet){
-    let width = 0;
-    let nbrOfColumns = sheet.getColumnCount();
+  getColWidthSum(sheet:GC.Spread.Sheets.Worksheet):number{
+    let width:number= 0;
+    let nbrOfColumns:number = sheet.getColumnCount();
     for(let i=0; i<nbrOfColumns; i++){
       width += sheet.getColumnWidth(i);
     }
@@ -162,20 +156,19 @@ export class Page1Component implements OnInit {
   }
 
   // use the unlockUnlockedCell method on all locked cells from editor
-  unlockCells(sels: GC.Spread.Sheets.Range[]){
+  unlockCells(sels: GC.Spread.Sheets.Range[]):void{
     for(let i=0; i<sels.length; i++){
       this.unlockUnlockedCell(sels[i]);
     }
-
   }
   
   // unlock only the cells from the selected area in the range object
   // colour them a little bit to let the user know they are editable
-  unlockUnlockedCell(sel: GC.Spread.Sheets.Range){
-    const sheet = this.spread.getActiveSheet();
+  unlockUnlockedCell(sel: GC.Spread.Sheets.Range):void{
+    const sheet:GC.Spread.Sheets.Worksheet = this.spread.getActiveSheet();
     for(let i = sel.row; i < (sel.row + sel.rowCount); i++){
       for(let j = sel.col; j < (sel.col + sel.colCount); j++){
-        let cell = sheet.getCell(i,j);
+        let cell:GC.Spread.Sheets.CellRange = sheet.getCell(i,j);
         cell.locked(false);
         cell.backColor('#ffffb3');
       }
