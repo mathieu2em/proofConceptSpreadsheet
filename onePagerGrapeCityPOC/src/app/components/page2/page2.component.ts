@@ -4,7 +4,6 @@ import * as Excel from '@grapecity/spread-excelio';
 import '@grapecity/spread-sheets-charts';
 import { Router } from '@angular/router';
 import { Spreadsheet } from 'src/app/models/Spreadsheet';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-page2',
@@ -28,7 +27,7 @@ export class Page2Component implements OnInit {
   private id: number = 0;
   public spreadsheetTitle:string;
 
-  @Output() messageEvent = new EventEmitter<Spreadsheet>();
+  @Output() messageEvent = new EventEmitter<{msg:string, sh:Spreadsheet}>();
 
   constructor( private readonly _router: Router ){}
   
@@ -53,7 +52,7 @@ export class Page2Component implements OnInit {
     let width:number = this.getColWidthSum(sheet);
     let height:number = this.getRowHeightSum(sheet);
 
-    this.messageEvent.emit({id: this.id++, title:this.spreadsheetTitle, jsonData: json, width: width.toString()+'px', height: height.toString()+'px', sels : this.editableCells})
+    this.messageEvent.emit({msg:"add", sh:{id: this.id++, title:this.spreadsheetTitle, jsonData: json, width: width.toString()+'px', height: height.toString()+'px', sels : this.editableCells}})
   }
 
   onClickMeImport(args):void {

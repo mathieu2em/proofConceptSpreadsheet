@@ -5,6 +5,7 @@ import '@grapecity/spread-sheets-charts';
 import { isUndefined } from 'util';
 import { Spreadsheet } from '../../models/Spreadsheet';
 import { Page2Component } from '../page2/page2.component';
+import { SpreadsheetItemComponent } from '../spreadsheet-item/spreadsheet-item.component'
 
 @Component({
   selector: 'app-page1',
@@ -28,7 +29,8 @@ export class Page1Component implements OnInit {
   private excelIO:Excel.IO;
 
   @ViewChild(Page2Component) editor;
-  
+  @ViewChild(SpreadsheetItemComponent) sh;
+
   constructor() {}
   
   ngOnInit(): void {
@@ -40,6 +42,20 @@ export class Page1Component implements OnInit {
   }
 
   receiveMessage($event) {
-    this.spreadsheets.push($event);
+    switch($event.msg){
+      case "add": {
+        this.spreadsheets.push($event.sh);
+        break;
+      }
+      case "del": {
+        console.log("del");
+        for(let i:number=0; i<this.spreadsheets.length; i++){
+          if(this.spreadsheets[i].id == $event.id){
+            this.spreadsheets.splice(i, 1);
+          }
+        }
+        break;
+      }
+    }
   }
 }

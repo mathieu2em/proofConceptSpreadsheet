@@ -2,12 +2,12 @@
      <h2>The editor</h2>
      <hr>
      <h3>Todo the buttons bar</h3>
-     <button mat-raised-button color="warn" (click)="addBorders()">add borders</button>
-     <button mat-raised-button color="warn" (click)="addRowBtn()">add row</button>
-     <button mat-raised-button color="warn" (click)="addColumnBtn()">add column</button>
-     <button mat-raised-button color="warn" (click)="rmRowBtn()">rm row</button>
-     <button mat-raised-button color="warn" (click)="rmColumnBtn()">rm column</button>
-     <button mat-raised-button color="warn" (click)="unlockCells()">unlock cells</button>
+     <button  (click)="addBorders()">add borders</button>
+     <button  (click)="addRowBtn()">add row</button>
+     <button  (click)="addColumnBtn()">add column</button>
+     <button  (click)="rmRowBtn()">rm row</button>
+     <button  (click)="rmColumnBtn()">rm column</button>
+     <button  (click)="unlockCells()">unlock cells</button>
      <hr>
      <gc-spread-sheets [backColor]="spreadBackColor" [hostStyle]="hostStyle" (workbookInitialized)="workbookInit($event)">
           <gc-worksheet [name]="sheetName">
@@ -23,6 +23,6 @@
           class="input" 
           placeholder="spreadsheet's title"
           [(ngModel)]="spreadsheetTitle">
-          <button mat-raised-button color="warn"  (click)="sendMessage()">Save to clause</button> <input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onClickMeImport($event)" />
+          <button   (click)="sendMessage()">Save to clause</button> <input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onClickMeImport($event)" />
      </div>
 </div>

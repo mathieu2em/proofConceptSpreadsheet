@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Spreadsheet } from 'src/app/models/Spreadsheet';
 import * as Excel from '@grapecity/spread-excelio';
 import * as GC from '@grapecity/spread-sheets';
@@ -21,9 +21,12 @@ export class SpreadsheetItemComponent implements OnInit {
   private spread:GC.Spread.Sheets.Workbook;
   private excelIO:Excel.IO;
 
+  @Output() messageEvent = new EventEmitter<{msg:string, id:number}>();
+
   constructor() { }
 
   ngOnInit(): void {
+    this.excelIO = new Excel.IO();
     this.jsonString = this.spreadsheet.jsonData;
     this.hostStyle = {
       width: this.spreadsheet.width,
@@ -151,13 +154,18 @@ export class SpreadsheetItemComponent implements OnInit {
   }
 
   onClickMe(args):void {
-    const filename:string = 'exportExcel.xlsx';
+    const filename:string = this.spreadsheet.title+'.xlsx';
     const json:string = JSON.stringify(this.spread.toJSON());
     
     this.excelIO.save(json, function (blob) {
-      saveAs(blob, filename);
+      console.log(blob);
+      //saveAs(blob, filename);
     }, function (e) {
       console.log(e);
     });
+  }
+
+  sendMessage() {
+    this.messageEvent.emit({msg:"del", id:this.spreadsheet.id})
   }
 }

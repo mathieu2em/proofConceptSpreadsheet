@@ -2,6 +2,7 @@
     <h3>{{ spreadsheet.title }}</h3>
     <gc-spread-sheets [hostStyle]="hostStyle" (workbookInitialized)="workbookInit($event)">
     </gc-spread-sheets>
-    <button mat-raised-button color="warn" (click)="onClickMe($event)">save spreadsheet to file</button>
+    <button (click)="onClickMe($event)">save spreadsheet to file</button>
+    <button (click)="sendMessage($event)">delete</button>
 </div>
 

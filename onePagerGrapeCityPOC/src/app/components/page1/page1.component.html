@@ -7,5 +7,5 @@
     <app-page2 (messageEvent)="receiveMessage($event)"></app-page2>
 </div>
 
-<app-spreadsheet-item *ngFor="let spreadsheet of spreadsheets" [spreadsheet]="spreadsheet">
+<app-spreadsheet-item *ngFor="let spreadsheet of spreadsheets" [spreadsheet]="spreadsheet" (messageEvent)="receiveMessage($event)">
 </app-spreadsheet-item>
