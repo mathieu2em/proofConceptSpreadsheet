@@ -24,7 +24,7 @@ export class Page2Component implements OnInit {
   private excelIO: Excel.IO;
   private editableCells: GC.Spread.Sheets.Range[];
 
-  constructor( private readonly _router: Router ) {}
+  constructor( private readonly _router: Router ){}
   
   ngOnInit():void {
     this.excelIO = new Excel.IO();

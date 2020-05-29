@@ -1,0 +1,11 @@
+<div id = "button">
+    <button mat-raised-button color="warn" routerLink="/page2">create a spreadsheet</button>
+</div>
+<h1>cool clause 1</h1>
+<p>ad vitam bugam blablatinoum wingardium leviosa</p>
+<hr>
+<div class='maincontainer'>
+    <gc-spread-sheets [hostStyle]="hostStyle" (workbookInitialized)="workbookInit($event)">
+    </gc-spread-sheets>
+</div>
+<button mat-raised-button color="warn" (click)="onClickMe($event)">save spreadsheet to file</button>

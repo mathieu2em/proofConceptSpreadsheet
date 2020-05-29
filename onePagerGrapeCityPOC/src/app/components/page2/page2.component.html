@@ -1,0 +1,23 @@
+<h2>The editor</h2>
+<hr>
+<h3>Todo the buttons bar</h3>
+<button mat-raised-button color="warn" (click)="addBorders()">add borders</button>
+<button mat-raised-button color="warn" (click)="addRowBtn()">add row</button>
+<button mat-raised-button color="warn" (click)="addColumnBtn()">add column</button>
+<button mat-raised-button color="warn" (click)="rmRowBtn()">rm row</button>
+<button mat-raised-button color="warn" (click)="rmColumnBtn()">rm column</button>
+<button mat-raised-button color="warn" (click)="unlockCells()">unlock cells</button>
+<hr>
+<gc-spread-sheets [backColor]="spreadBackColor" [hostStyle]="hostStyle" (workbookInitialized)="workbookInit($event)">
+    <gc-worksheet [name]="sheetName">
+         <gc-column dataField="Name" width=300></gc-column>
+         <gc-column dataField="Category" [width]=columnWidth></gc-column>
+         <gc-column dataField="Price" [width]=columnWidth formatter="$ #.00"></gc-column>
+         <gc-column dataField="Shopping Place" [width]=columnWidth></gc-column>
+    </gc-worksheet>
+</gc-spread-sheets>
+<hr>
+<div id = "button">
+     <button mat-raised-button color="warn" (click)="onClickMe($event)">Save to clause</button> <input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onClickMeImport($event)" />
+</div>
+

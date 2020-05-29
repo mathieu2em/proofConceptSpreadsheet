@@ -4,7 +4,6 @@ import * as Excel from '@grapecity/spread-excelio';
 import '@grapecity/spread-sheets-charts';
 import {saveAs} from 'file-saver';
 import { isUndefined } from 'util';
-import { SelectorListContext } from '@angular/compiler';
 
 @Component({
   selector: 'app-page1',
@@ -13,6 +12,8 @@ import { SelectorListContext } from '@angular/compiler';
 })
 
 export class Page1Component implements OnInit {
+  // a list of spreadsheet components
+  spreadsheets:GC.Spread.Sheets.Workbook[];
   // contains the json value of the spreadsheet saved in page2
   jsonString:string;
   
