@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import * as GC from "@grapecity/spread-sheets";
 import * as Excel from '@grapecity/spread-excelio';
 import '@grapecity/spread-sheets-charts';
 import { Router } from '@angular/router';
+import { Spreadsheet } from 'src/app/models/Spreadsheet';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-page2',
@@ -23,6 +25,10 @@ export class Page2Component implements OnInit {
   private spread: GC.Spread.Sheets.Workbook;
   private excelIO: Excel.IO;
   private editableCells: GC.Spread.Sheets.Range[];
+  private id: number = 0;
+  public spreadsheetTitle:string;
+
+  @Output() messageEvent = new EventEmitter<Spreadsheet>();
 
   constructor( private readonly _router: Router ){}
   
@@ -41,15 +47,13 @@ export class Page2Component implements OnInit {
     this.spread.options.allowUserDragMerge = true;
   }
 
-  onClickMe(args):void {
+  sendMessage() {
     const json:string                      = JSON.stringify(this.spread.toJSON(true));
     const sheet:GC.Spread.Sheets.Worksheet = this.spread.getActiveSheet();
-    alert(json);
     let width:number = this.getColWidthSum(sheet);
     let height:number = this.getRowHeightSum(sheet);
-    this.goToComponentB( 
-      { json: json, width: width, height: height, sels : this.editableCells }
-      );
+
+    this.messageEvent.emit({id: this.id++, title:this.spreadsheetTitle, jsonData: json, width: width.toString()+'px', height: height.toString()+'px', sels : this.editableCells})
   }
 
   onClickMeImport(args):void {

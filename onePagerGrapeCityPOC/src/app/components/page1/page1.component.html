@@ -1,11 +1,11 @@
-<div id = "button">
-    <button mat-raised-button color="warn" routerLink="/page2">create a spreadsheet</button>
-</div>
+
+<button mat-raised-button color="warn" (click)="showEditorBtn()">create a spreadsheet</button>
 <h1>cool clause 1</h1>
 <p>ad vitam bugam blablatinoum wingardium leviosa</p>
 <hr>
-<div class='maincontainer'>
-    <gc-spread-sheets [hostStyle]="hostStyle" (workbookInitialized)="workbookInit($event)">
-    </gc-spread-sheets>
+<div *ngIf="showEditor">
+    <app-page2 (messageEvent)="receiveMessage($event)"></app-page2>
 </div>
-<button mat-raised-button color="warn" (click)="onClickMe($event)">save spreadsheet to file</button>
+
+<app-spreadsheet-item *ngFor="let spreadsheet of spreadsheets" [spreadsheet]="spreadsheet">
+</app-spreadsheet-item>

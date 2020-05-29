@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import * as GC from '@grapecity/spread-sheets';
+import { Component, OnInit, Input } from '@angular/core';
+import { Spreadsheet } from 'src/app/models/Spreadsheet';
 import * as Excel from '@grapecity/spread-excelio';
-import '@grapecity/spread-sheets-charts';
-import {saveAs} from 'file-saver';
+import * as GC from '@grapecity/spread-sheets';
 import { isUndefined } from 'util';
+import {saveAs} from 'file-saver';
 
 @Component({
-  selector: 'app-page1',
-  templateUrl: './page1.component.html',
-  styleUrls: ['./page1.component.scss']
+  selector: 'app-spreadsheet-item',
+  templateUrl: './spreadsheet-item.component.html',
+  styleUrls: ['./spreadsheet-item.component.scss']
 })
-
-export class Page1Component implements OnInit {
+export class SpreadsheetItemComponent implements OnInit {
+  @Input() spreadsheet:Spreadsheet;
   // contains the json value of the spreadsheet saved in page2
   jsonString:string;
   
@@ -20,29 +20,16 @@ export class Page1Component implements OnInit {
   
   private spread:GC.Spread.Sheets.Workbook;
   private excelIO:Excel.IO;
-  
-  constructor() {}
-  
+
+  constructor() { }
+
   ngOnInit(): void {
-    this.excelIO = new Excel.IO();
-    if(!isUndefined(window.history.state.data)){
-      this.jsonString = window.history.state.data.json;
-      const width:string = window.history.state.data.width.toString() + 'px';
-      const height:string = window.history.state.data.height.toString() + 'px';
-      //console.log('result='+width+height); //test
-      //console.log(this.jsonString) //test
-      this.hostStyle = {
-        width: width,
-        height: height
-      };
-    } else {
-      this.hostStyle = {
-        width: '0px',
-        height: '0px'
-      };
+    this.jsonString = this.spreadsheet.jsonData;
+    this.hostStyle = {
+      width: this.spreadsheet.width,
+      height: this.spreadsheet.height
     }
   }
-  
   workbookInit(args):void {
     this.spread = args.spread;
     let sheet:GC.Spread.Sheets.Worksheet = this.spread.getActiveSheet();
@@ -69,17 +56,6 @@ export class Page1Component implements OnInit {
   // use .fromJSON method on spreadsheet component to load table with data and formatting
   onFileChange(args):void {
     this.spread.fromJSON(JSON.parse(this.jsonString))
-  }
-
-  onClickMe(args):void {
-    const filename:string = 'exportExcel.xlsx';
-    const json:string = JSON.stringify(this.spread.toJSON());
-    
-    this.excelIO.save(json, function (blob) {
-      saveAs(blob, filename);
-    }, function (e) {
-      console.log(e);
-    });
   }
 
   // set all the correct parameters for a usable read-only mode.
@@ -119,8 +95,9 @@ export class Page1Component implements OnInit {
       allowInsertColumns : false,
       allowInsertRows : false,
     }
+    sheet.setActiveCell(); // gives an error but the only way I found not to show any active cell in the readonly ... bruh
     // unlock the cells the user asked to be editable in the editor
-    if(!isUndefined(window.history.state.data) && !isUndefined(window.history.state.data.sels)) this.unlockCells(window.history.state.data.sels);
+    if(!isUndefined(this.spreadsheet.sels)) this.unlockCells(this.spreadsheet.sels);
   }
 
   adjustSize(spread:GC.Spread.Sheets.Workbook):void{
@@ -171,5 +148,16 @@ export class Page1Component implements OnInit {
         cell.backColor('#ffffb3');
       }
     }
+  }
+
+  onClickMe(args):void {
+    const filename:string = 'exportExcel.xlsx';
+    const json:string = JSON.stringify(this.spread.toJSON());
+    
+    this.excelIO.save(json, function (blob) {
+      saveAs(blob, filename);
+    }, function (e) {
+      console.log(e);
+    });
   }
 }
