@@ -4,6 +4,7 @@ import * as Excel from '@grapecity/spread-excelio';
 import '@grapecity/spread-sheets-charts';
 import { Router } from '@angular/router';
 import { Spreadsheet } from 'src/app/models/Spreadsheet';
+import { tick } from '@angular/core/testing';
 
 @Component({
   selector: 'app-page2',
@@ -26,6 +27,7 @@ export class Page2Component implements OnInit {
   private editableCells: GC.Spread.Sheets.Range[];
   private id: number = 0;
   public spreadsheetTitle:string;
+  public formulaString:string;
 
   @Output() messageEvent = new EventEmitter<{msg:string, sh:Spreadsheet}>();
 
@@ -128,9 +130,9 @@ export class Page2Component implements OnInit {
     rng.font('12px -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif');
   }
 
+  // set current cell selection from client to Italic
   setItalic():void{
     const sheet:GC.Spread.Sheets.Worksheet = this.spread.getActiveSheet();
-    const style = new GC.Spread.Sheets.Style();
     const sels:GC.Spread.Sheets.Range          = sheet.getSelections()[0];
     const selection:GC.Spread.Sheets.CellRange = sheet.getRange(sels.row, sels.col, sels.rowCount, sels.colCount);
     if(typeof(selection.font())=="string"){
@@ -142,6 +144,15 @@ export class Page2Component implements OnInit {
         selection.font("italic " + selection.font());
       }
     }
+  }
+
+  // set current cell selection from client to show a certain formula result
+  setFormula():void{
+    const sheet:GC.Spread.Sheets.Worksheet = this.spread.getActiveSheet();
+    const sels:GC.Spread.Sheets.Range          = sheet.getSelections()[0];
+    const selection:GC.Spread.Sheets.CellRange = sheet.getRange(sels.row, sels.col, sels.rowCount, sels.colCount);
+    console.log(this.formulaString);
+    selection.formula(this.formulaString);
   }
 
   // get the sum of row heights in pixel

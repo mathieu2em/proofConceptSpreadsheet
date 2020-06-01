@@ -10,6 +10,13 @@
      <button  (click)="setItalic()">Italique</button>
      <button  (click)="unlockCells()">unlock cells</button>
      <hr>
+     <div id = "button">
+          <input type="text" 
+          class="input" 
+          placeholder="formula to current cell"
+          [(ngModel)]="formulaString">
+          <button  (click)="setFormula()">add formula</button>
+     </div>
      <gc-spread-sheets [backColor]="spreadBackColor" [hostStyle]="hostStyle" (workbookInitialized)="workbookInit($event)">
           <gc-worksheet [name]="sheetName">
                <gc-column dataField="" width=300></gc-column>
