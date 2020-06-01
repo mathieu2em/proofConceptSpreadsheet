@@ -7,14 +7,15 @@
      <button  (click)="addColumnBtn()">add column</button>
      <button  (click)="rmRowBtn()">rm row</button>
      <button  (click)="rmColumnBtn()">rm column</button>
+     <button  (click)="setItalic()">Italique</button>
      <button  (click)="unlockCells()">unlock cells</button>
      <hr>
      <gc-spread-sheets [backColor]="spreadBackColor" [hostStyle]="hostStyle" (workbookInitialized)="workbookInit($event)">
           <gc-worksheet [name]="sheetName">
-               <gc-column dataField="Name" width=300></gc-column>
-               <gc-column dataField="Category" [width]=columnWidth></gc-column>
-               <gc-column dataField="Price" [width]=columnWidth formatter="$ #.00"></gc-column>
-               <gc-column dataField="Shopping Place" [width]=columnWidth></gc-column>
+               <gc-column dataField="" width=300></gc-column>
+               <gc-column dataField="" [width]=columnWidth></gc-column>
+               <gc-column dataField="" [width]=columnWidth formatter="$ #.00"></gc-column>
+               <gc-column dataField="" [width]=columnWidth></gc-column>
           </gc-worksheet>
      </gc-spread-sheets>
      <hr>

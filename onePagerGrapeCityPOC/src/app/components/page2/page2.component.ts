@@ -14,7 +14,7 @@ import { Spreadsheet } from 'src/app/models/Spreadsheet';
 export class Page2Component implements OnInit {
   // caracteristiques basiques du spreadsheet
   spreadBackColor:string = 'aliceblue';
-  sheetName:string = 'people list';
+  sheetName:string = 'edilex sheet';
   hostStyle: object = {
     width: '800px',
     height: '300px'
@@ -62,6 +62,7 @@ export class Page2Component implements OnInit {
     if (this.spread && file) {
       this.excelIO.open(file, (json) => {
         this.spread.fromJSON(json, {});
+        this.editableCells = [];
         setTimeout(() => {
           alert('load successfully');
         }, 0);
@@ -106,6 +107,41 @@ export class Page2Component implements OnInit {
     selection.borderBottom(border);
     selection.borderLeft(border);
     selection.borderRight(border);
+  }
+
+  // example func for font changeing
+  setFontStyleExample():void{
+    const sheet:GC.Spread.Sheets.Worksheet = this.spread.getActiveSheet();
+    let style = new GC.Spread.Sheets.Style();
+    const rowIndex:number = 1;
+    const colIndex:number = 1;
+    const rowCount:number = 1;
+    const colCount:number = 1;
+
+    style.font = '12px -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif'; // same as CSS font attribute
+    // apply style on whole sheet
+    sheet.setDefaultStyle(style);
+    // set style for a single cell
+    sheet.setStyle(rowIndex, colIndex, style);
+    // set style for cell range
+    var rng = sheet.getRange(rowIndex, colIndex, rowCount, colCount);
+    rng.font('12px -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif');
+  }
+
+  setItalic():void{
+    const sheet:GC.Spread.Sheets.Worksheet = this.spread.getActiveSheet();
+    const style = new GC.Spread.Sheets.Style();
+    const sels:GC.Spread.Sheets.Range          = sheet.getSelections()[0];
+    const selection:GC.Spread.Sheets.CellRange = sheet.getRange(sels.row, sels.col, sels.rowCount, sels.colCount);
+    if(typeof(selection.font())=="string"){
+      let position:number = selection.font().indexOf('italic');
+      // means the cellRange is already italic
+      if( position > -1){
+        selection.font(selection.font().substring(position+6)); // cut the italic word from font
+      } else {
+        selection.font("italic " + selection.font());
+      }
+    }
   }
 
   // get the sum of row heights in pixel
