@@ -52,7 +52,9 @@ export class Page2Component implements OnInit {
     let width:number = this.getColWidthSum(sheet);
     let height:number = this.getRowHeightSum(sheet);
 
-    this.messageEvent.emit({msg:"add", sh:{id: this.id++, title:this.spreadsheetTitle, jsonData: json, width: width.toString()+'px', height: height.toString()+'px', sels : this.editableCells}})
+    this.messageEvent.emit({msg:"add", sh:{id: this.id++, title:this.spreadsheetTitle, jsonData: json, width: width.toString()+'px', height: height.toString()+'px', sels : this.editableCells}});
+
+    this.editableCells = [];
   }
 
   onClickMeImport(args):void {

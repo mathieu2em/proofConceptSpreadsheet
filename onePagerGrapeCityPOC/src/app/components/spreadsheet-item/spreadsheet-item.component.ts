@@ -158,8 +158,7 @@ export class SpreadsheetItemComponent implements OnInit {
     const json:string = JSON.stringify(this.spread.toJSON());
     
     this.excelIO.save(json, function (blob) {
-      console.log(blob);
-      //saveAs(blob, filename);
+      saveAs(blob, filename);
     }, function (e) {
       console.log(e);
     });
