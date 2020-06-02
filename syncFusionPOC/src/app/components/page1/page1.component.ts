@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { isUndefined } from 'util';
-import { SpreadsheetComponent } from '@syncfusion/ej2-angular-spreadsheet';
-import * as $ from 'jquery'; window["$"] = $; window["jQuery"] = $;
+import { Spreadsheet } from '@syncfusion/ej2-spreadsheet';
+import { getComponent } from '@syncfusion/ej2-base';
 
 
 @Component({
@@ -10,11 +10,9 @@ import * as $ from 'jquery'; window["$"] = $; window["jQuery"] = $;
   styleUrls: ['./page1.component.scss']
 })
 export class Page1Component implements OnInit {
-  spreadsheetSaved: any;
+  response: any;
   // to show or not the div containing the readonly spreadsheet
-  isInvisible: boolean;
-
-  @ViewChild('edxSpreadsheet') public spreadsheetObj: SpreadsheetComponent;
+  isVisible: boolean = false;
 
   constructor() { }
 
@@ -24,21 +22,17 @@ export class Page1Component implements OnInit {
   
   public ngAfterViewInit(): void {
     // assign the value of the data passed from the router (if so) from page2Component
-    this.spreadsheetSaved = window.history.state.data;
-    console.log(this.spreadsheetSaved); // test
+    this.response = window.history.state.data;
+    console.log(this.response); // test
     console.log('yess'); // test
-    if(!(isUndefined(this.spreadsheetSaved))){
-      this.spreadsheetObj.openFromJson(JSON.stringify(this.spreadsheetSaved.jsonObject));
-      this.isInvisible = false;
-    } else {
-      this.isInvisible = true;
+    if(!(isUndefined(this.response))){
+      this.loadFromJSON();
     }
   }
   
   loadFromJSON() {
-    var excelObj = $("#spreadsheet").data("ejSpreadsheet");
-    excelObj.loadFromJSON(this.spreadsheetSaved);
-    console.log("loaded");
+    let spreadsheet: Spreadsheet = getComponent(document.getElementById("sprd2"), "spreadsheet");
+    spreadsheet.openFromJson({ file: this.response.jsonObject });
 }
 
 }

@@ -177,13 +177,14 @@ export class Page2Component implements OnInit {
   
   setLimitedUse(spread: GC.Spread.Sheets.Workbook):void{
     let sheet = spread.getActiveSheet();
-    // sheet.options.isProtected = true;
+    // set the sheet as protected which means you can lock or unlock cells
+    //sheet.options.isProtected = true;
     // Hide column headers.
     //sheet.options.colHeaderVisible = false;
     // Hide row headers.
     //sheet.options.rowHeaderVisible = false;
     // block editing completely
-    /*sheet.bind(GC.Spread.Sheets.Events.EditStarting, function (sender, args, e) {e.preventDefault()});*/
+    //sheet.bind(GC.Spread.Sheets.Events.EditStarting, function (sender, args, e) {e.preventDefault()});
     // block sheet adding
     spread.options.newTabVisible = false;
     //spread.options.showHorizontalScrollbar = false;
