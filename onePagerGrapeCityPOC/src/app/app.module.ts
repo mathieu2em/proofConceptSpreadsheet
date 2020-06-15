@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 
 import { SpreadSheetsModule } from "@grapecity/spread-sheets-angular";
 import { Page1Component } from './components/page1/page1.component';
-import { Page2Component } from './components/page2/page2.component';
+import { SpreadEditorComponent } from './components/spreadEditor/spreadEditor.component';
 import { SpreadsheetItemComponent } from './components/spreadsheet-item/spreadsheet-item.component';
 
 import { FormsModule } from '@angular/forms';
@@ -15,7 +15,7 @@ import { FormsModule } from '@angular/forms';
   declarations: [
     AppComponent,
     Page1Component,
-    Page2Component,
+    SpreadEditorComponent,
     SpreadsheetItemComponent,
   ],
   imports: [

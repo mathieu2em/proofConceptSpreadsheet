@@ -2,9 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import * as GC from '@grapecity/spread-sheets';
 import * as Excel from '@grapecity/spread-excelio';
 import '@grapecity/spread-sheets-charts';
-import { isUndefined } from 'util';
 import { Spreadsheet } from '../../models/Spreadsheet';
-import { Page2Component } from '../page2/page2.component';
+import { SpreadEditorComponent } from '../SpreadEditor/spreadEditor.component';
 import { SpreadsheetItemComponent } from '../spreadsheet-item/spreadsheet-item.component'
 
 @Component({
@@ -28,7 +27,7 @@ export class Page1Component implements OnInit {
   private spread:GC.Spread.Sheets.Workbook;
   private excelIO:Excel.IO;
 
-  @ViewChild(Page2Component) editor;
+  @ViewChild(SpreadEditorComponent) editor;
   @ViewChild(SpreadsheetItemComponent) sh;
 
   constructor() {}

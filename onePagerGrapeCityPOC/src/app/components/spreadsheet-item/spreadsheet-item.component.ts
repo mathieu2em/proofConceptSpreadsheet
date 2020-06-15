@@ -156,7 +156,19 @@ export class SpreadsheetItemComponent implements OnInit {
   onClickMe(args):void {
     const filename:string = this.spreadsheet.title+'.xlsx';
     const json:string = JSON.stringify(this.spread.toJSON());
-    
+
+    this.spread.savePDF(function (blob) {
+      saveAs(blob, filename + '.pdf');
+  }, function (error) {
+      console.log(error);
+  }, {
+      title: 'Test Title',
+      author: 'Test Author',
+      subject: 'Test Subject',
+      keywords: 'Test Keywords',
+      creator: 'test Creator'
+  });
+
     this.excelIO.save(json, function (blob) {
       saveAs(blob, filename);
     }, function (e) {

@@ -4,7 +4,7 @@
 <p>ad vitam bugam blablatinoum wingardium leviosa</p>
 <hr>
 <div *ngIf="showEditor">
-    <app-page2 (messageEvent)="receiveMessage($event)"></app-page2>
+    <app-spreadEditor (messageEvent)="receiveMessage($event)"></spreadEditor>
 </div>
 
 <app-spreadsheet-item *ngFor="let spreadsheet of spreadsheets" [spreadsheet]="spreadsheet" (messageEvent)="receiveMessage($event)">

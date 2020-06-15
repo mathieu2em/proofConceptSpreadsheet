@@ -4,15 +4,14 @@ import * as Excel from '@grapecity/spread-excelio';
 import '@grapecity/spread-sheets-charts';
 import { Router } from '@angular/router';
 import { Spreadsheet } from 'src/app/models/Spreadsheet';
-import { tick } from '@angular/core/testing';
 
 @Component({
-  selector: 'app-page2',
-  templateUrl: './page2.component.html',
-  styleUrls: ['./page2.component.scss']
+  selector: 'app-spreadEditor',
+  templateUrl: './spreadEditor.component.html',
+  styleUrls: ['./spreadEditor.component.scss']
 })
 
-export class Page2Component implements OnInit {
+export class SpreadEditorComponent implements OnInit {
   // caracteristiques basiques du spreadsheet
   spreadBackColor:string = 'aliceblue';
   sheetName:string = 'edilex sheet';
