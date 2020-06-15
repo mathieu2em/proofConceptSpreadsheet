@@ -98,7 +98,7 @@ export class SpreadsheetItemComponent implements OnInit {
       allowInsertColumns : false,
       allowInsertRows : false,
     }
-    sheet.setActiveCell(); // gives an error but the only way I found not to show any active cell in the readonly ... bruh
+    sheet.setActiveCell(null,null); // gives an error but the only way I found not to show any active cell in the readonly ... bruh
     // unlock the cells the user asked to be editable in the editor
     if(!isUndefined(this.spreadsheet.sels)) this.unlockCells(this.spreadsheet.sels);
   }
