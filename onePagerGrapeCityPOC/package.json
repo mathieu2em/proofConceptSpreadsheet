@@ -23,6 +23,8 @@
     "@grapecity/spread-sheets": "^13.1.1",
     "@grapecity/spread-sheets-angular": "^13.1.1",
     "@grapecity/spread-sheets-charts": "^13.1.1",
+    "@grapecity/spread-sheets-pdf": "^13.1.1",
+    "@grapecity/spread-sheets-print": "^13.1.1",
     "@types/jest": "^25.2.3",
     "file-saver": "^2.0.2",
     "node-sass": "^4.14.1",
