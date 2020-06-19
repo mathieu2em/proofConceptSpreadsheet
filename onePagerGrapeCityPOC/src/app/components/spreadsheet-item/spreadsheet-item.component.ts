@@ -159,7 +159,14 @@ export class SpreadsheetItemComponent implements OnInit {
 
   onClickMe(args):void {
     const filename:string = this.spreadsheet.title+'.xlsx';
+    var printInfo: GC.Spread.Sheets.Print.PrintInfo = this.spread.getActiveSheet().printInfo();
+    printInfo.columnStart(); // PrintArea TODO
+    printInfo.columnEnd();   // PrintArea TODO
+    printInfo.rowStart();    // PrintArea TODO
+    printInfo.rowEnd();      // PrintArea TODO
     const json:string = JSON.stringify(this.spread.toJSON());
+
+
 
     this.spread.savePDF(function (blob) {
       saveAs(blob, filename + '.pdf');
