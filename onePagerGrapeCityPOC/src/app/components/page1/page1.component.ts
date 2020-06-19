@@ -3,7 +3,7 @@ import * as GC from '@grapecity/spread-sheets';
 import * as Excel from '@grapecity/spread-excelio';
 import '@grapecity/spread-sheets-charts';
 import { Spreadsheet } from '../../models/Spreadsheet';
-import { SpreadEditorComponent } from '../SpreadEditor/spreadEditor.component';
+import { SpreadEditorComponent } from '../spreadEditor/spreadEditor.component';
 import { SpreadsheetItemComponent } from '../spreadsheet-item/spreadsheet-item.component'
 
 @Component({

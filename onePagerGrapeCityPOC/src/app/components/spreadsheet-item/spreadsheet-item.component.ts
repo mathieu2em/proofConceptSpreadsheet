@@ -1,7 +1,11 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Spreadsheet } from 'src/app/models/Spreadsheet';
-import * as Excel from '@grapecity/spread-excelio';
-import * as GC from '@grapecity/spread-sheets';
+import * as GC from "@grapecity/spread-sheets";
+import * as Excel from "@grapecity/spread-excelio";
+import "@grapecity/spread-sheets-angular";
+import "@grapecity/spread-sheets-charts";
+import "@grapecity/spread-sheets-print";
+import "@grapecity/spread-sheets-pdf";
 import { isUndefined } from 'util';
 import {saveAs} from 'file-saver';
 

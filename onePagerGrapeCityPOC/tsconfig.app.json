@@ -10,6 +10,8 @@
   ],
   "include": [
     "src/**/*.ts",
-    "node_modules/@grapecity/spread-sheets-angular/dist/gc.spread.sheets.angular.ts"
+    "node_modules/@grapecity/spread-sheets-angular/dist/gc.spread.sheets.angular.ts",
+    "node_modules/@grapecity/spread-sheets-print/dist/gc.spread.sheets.print.min.js",
+    "node_modules/@grapecity/spread-sheets-pdf/dist/gc.spread.sheets.pdf.min.js"
   ]
 }
