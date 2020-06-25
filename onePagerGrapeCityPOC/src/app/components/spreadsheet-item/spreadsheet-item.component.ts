@@ -160,10 +160,14 @@ export class SpreadsheetItemComponent implements OnInit {
   onClickMe(args):void {
     const filename:string = this.spreadsheet.title+'.xlsx';
     var printInfo: GC.Spread.Sheets.Print.PrintInfo = this.spread.getActiveSheet().printInfo();
-    printInfo.columnStart(); // PrintArea TODO
-    printInfo.columnEnd();   // PrintArea TODO
-    printInfo.rowStart();    // PrintArea TODO
-    printInfo.rowEnd();      // PrintArea TODO
+    printInfo.columnStart(0); // PrintArea TODO
+    printInfo.columnEnd(3);   // PrintArea TODO
+    printInfo.rowStart(0);    // PrintArea TODO
+    printInfo.rowEnd(3);      // PrintArea TODO
+      printInfo.showGridLine(false);
+      printInfo.showRowHeader(GC.Spread.Sheets.Print.PrintVisibilityType.hide);
+      printInfo.showColumnHeader(GC.Spread.Sheets.Print.PrintVisibilityType.hide);
+      printInfo.headerCenter("GrapeCity");
     const json:string = JSON.stringify(this.spread.toJSON());
 
 
