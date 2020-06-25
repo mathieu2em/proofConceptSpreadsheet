@@ -73,6 +73,23 @@ export class SpreadEditorComponent implements OnInit {
     }
   }
 
+  onClickMeImportB64(args):void {
+    const file: File = args.srcElement && args.srcElement.files && args.srcElement.files[0];
+    
+
+    if (this.spread && file) {
+      this.excelIO.open(file, (json) => {
+        this.spread.fromJSON(json, {});
+        this.editableCells = [];
+        setTimeout(() => {
+          alert('load successfully');
+        }, 0);
+      }, (error) => {
+        alert('load fail');
+      });
+    }
+  }
+
   goToComponentB(passedObj: Object): void {
     this._router.navigate(['/page1'], {state: {data: passedObj}});
   }
