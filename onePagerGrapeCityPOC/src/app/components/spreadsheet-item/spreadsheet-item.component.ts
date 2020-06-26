@@ -8,6 +8,8 @@ import "@grapecity/spread-sheets-print";
 import "@grapecity/spread-sheets-pdf";
 import { isUndefined } from 'util';
 import {saveAs} from 'file-saver';
+import { resolve } from 'dns';
+import { strict } from 'assert';
 
 @Component({
   selector: 'app-spreadsheet-item',
@@ -157,20 +159,64 @@ export class SpreadsheetItemComponent implements OnInit {
     }
   }
 
-  onClickMe(args):void {
+  // base64 converter for the blob. use inside the excelio method
+  blobToBase64(blob, callback): void {
+    let reader: FileReader = new FileReader();
+    reader.onload = ()=>{
+        let dataUrl:string | ArrayBuffer = reader.result;
+        var base64 = (<string>dataUrl).split(',')[1];
+        callback(dataUrl, base64); // (b64blob, b64string)
+    };
+    reader.readAsDataURL(blob);
+  };
+
+  // make sure to have the header stuff
+  Base64ToXLSXBlob(b64str){
+    const contentType = "";
+  }
+
+  onClickMeB64(args):void {
+    const filename:string = this.spreadsheet.title+'.txt';
+    const jsonstr:string = JSON.stringify(this.spread.toJSON());
+
+    this.excelIO.save(jsonstr, (blob:Blob)=>{
+      this.blobToBase64(blob, (b64blob, base64str)=>{
+        console.log(base64str);
+        console.log(b64blob);
+        saveAs(b64blob, "base64.txt");
+      });
+      //saveAs(blob, filename);
+    }, function (e) {
+      console.log(e);
+    });
+  }
+
+  onClickMeXL(args):void {
     const filename:string = this.spreadsheet.title+'.xlsx';
+    const jsonstr:string = JSON.stringify(this.spread.toJSON());
+
+    this.excelIO.save(jsonstr, (blob:Blob)=>{
+      saveAs(blob, filename);
+      //saveAs(blob, filename);
+    }, function (e) {
+      console.log(e);
+    });
+  }
+
+  onClickMePDF(args):void {
+    const filename:string = this.spreadsheet.title+'.pdf';
     var printInfo: GC.Spread.Sheets.Print.PrintInfo = this.spread.getActiveSheet().printInfo();
+    /*
     printInfo.columnStart(0); // PrintArea TODO
     printInfo.columnEnd(3);   // PrintArea TODO
     printInfo.rowStart(0);    // PrintArea TODO
     printInfo.rowEnd(3);      // PrintArea TODO
+    */
       printInfo.showGridLine(false);
       printInfo.showRowHeader(GC.Spread.Sheets.Print.PrintVisibilityType.hide);
       printInfo.showColumnHeader(GC.Spread.Sheets.Print.PrintVisibilityType.hide);
       printInfo.headerCenter("GrapeCity");
-    const json:string = JSON.stringify(this.spread.toJSON());
-
-
+    const jsonstr:string = JSON.stringify(this.spread.toJSON());
 
     this.spread.savePDF(function (blob) {
       saveAs(blob, filename + '.pdf');
@@ -183,12 +229,6 @@ export class SpreadsheetItemComponent implements OnInit {
       keywords: 'Test Keywords',
       creator: 'test Creator'
   });
-
-    this.excelIO.save(json, function (blob) {
-      saveAs(blob, filename);
-    }, function (e) {
-      console.log(e);
-    });
   }
 
   sendMessage() {
