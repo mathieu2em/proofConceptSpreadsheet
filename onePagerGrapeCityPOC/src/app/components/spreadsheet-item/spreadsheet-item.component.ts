@@ -54,6 +54,8 @@ export class SpreadsheetItemComponent implements OnInit {
     sheet.options.rowHeaderVisible = false;
     // set all the right properties for read-only
     this.setReadonly(this.spread);
+    // unlock the user's selected for unlocking's cells
+    if(!isUndefined(this.spreadsheet.sels)) this.unlockCells(this.spreadsheet.sels);
     /*
     this.hostStyle.height = this.getRowHeightSum(sheet).toString();
     console.log(this.hostStyle.height);
@@ -104,9 +106,6 @@ export class SpreadsheetItemComponent implements OnInit {
       allowInsertColumns : false,
       allowInsertRows : false,
     }
-    sheet.setActiveCell(null,null); // gives an error but the only way I found not to show any active cell in the readonly ... bruh
-    // unlock the cells the user asked to be editable in the editor
-    if(!isUndefined(this.spreadsheet.sels)) this.unlockCells(this.spreadsheet.sels);
   }
 
   adjustSize(spread:GC.Spread.Sheets.Workbook):void{
@@ -159,6 +158,35 @@ export class SpreadsheetItemComponent implements OnInit {
     }
   }
 
+  unsetReadonly(spread: GC.Spread.Sheets.Workbook):void{
+    const sheet:GC.Spread.Sheets.Worksheet = spread.getActiveSheet();
+    spread.options.allowUserDragMerge = true;
+    spread.options.allowAutoCreateHyperlink = true;
+    spread.options.allowContextMenu = true;
+    spread.options.allowDynamicArray = true;
+    spread.options.allowSheetReorder = true;
+    spread.options.allowUserDragFill = true;
+    spread.options.allowUserDragMerge = true;
+    spread.options.allowUserResize = true;
+    spread.options.allowCopyPasteExcelStyle = true;
+    sheet.options.isProtected = false;
+    sheet.options.protectionOptions = {
+      allowSelectLockedCells : true,
+      allowSelectUnlockedCells : true,
+      allowSort : true,
+      allowFilter : true,
+      allowEditObjects : true,
+      allowResizeRows : true,
+      allowResizeColumns : true,
+      allowDeleteColumns : true,
+      allowDeleteRows : true,
+      allowDragInsertColumns : true,
+      allowDragInsertRows : true,
+      allowInsertColumns : true,
+      allowInsertRows : true,
+    }
+  }
+
   // base64 converter for the excel blob. use inside the excelio method
   // if you save the string internally you shoud only keep b64string
   // if you save the string to a file using saveAs from file-save you should use 
@@ -173,64 +201,72 @@ export class SpreadsheetItemComponent implements OnInit {
     reader.readAsDataURL(blob);
   };
 
-  onClickMeB64(args):void {
+  onClickMe(which:string):void {
     const filename:string = this.spreadsheet.title+'.txt';
+    // unprotect the sheet before extracting its JSON, then reprotecting it
+    this.unsetReadonly(this.spread);
+    // extract modifiable json
     const jsonstr:string = JSON.stringify(this.spread.toJSON());
+    // reprotect our baby sheet
+    this.setReadonly(this.spread);
 
-    // the excelIO save then call the secont argument method as callback
-    this.excelIO.save(jsonstr, (blob:Blob)=>{
-      // this method encode the blob into base64 string and then return the blob with encoding and base64string
-      // if you use saveAs on the base64encoded blob, it is decoded by file-save before being saved 
-      // so you have to create a text blob containing only the base64 string and then save it as text file
-      this.blobToBase64(blob, (baseBlob, base64str)=>{
-        console.log(base64str); 
-        console.log(baseBlob);
-        let b64Blob = new Blob([base64str], {type: "text/plain;charset=utf-8"});
-        saveAs(b64Blob, "base64.txt");
-      });
-    }, function (e) {
-      console.log(e);
-    });
-  }
-
-  onClickMeXL(args):void {
-    const filename:string = this.spreadsheet.title+'.xlsx';
-    const jsonstr:string = JSON.stringify(this.spread.toJSON());
-
-    this.excelIO.save(jsonstr, (blob:Blob)=>{
-      saveAs(blob, filename);
-      //saveAs(blob, filename);
-    }, function (e) {
-      console.log(e);
-    });
-  }
-
-  onClickMePDF(args):void {
-    const filename:string = this.spreadsheet.title+'.pdf';
-    var printInfo: GC.Spread.Sheets.Print.PrintInfo = this.spread.getActiveSheet().printInfo();
-    /*
-    printInfo.columnStart(0); // PrintArea TODO
-    printInfo.columnEnd(3);   // PrintArea TODO
-    printInfo.rowStart(0);    // PrintArea TODO
-    printInfo.rowEnd(3);      // PrintArea TODO
-    */
-      printInfo.showGridLine(false);
-      printInfo.showRowHeader(GC.Spread.Sheets.Print.PrintVisibilityType.hide);
-      printInfo.showColumnHeader(GC.Spread.Sheets.Print.PrintVisibilityType.hide);
-      printInfo.headerCenter("GrapeCity");
-    const jsonstr:string = JSON.stringify(this.spread.toJSON());
-
-    this.spread.savePDF(function (blob) {
-      saveAs(blob, filename + '.pdf');
-  }, function (error) {
-      console.log(error);
-  }, {
-      title: 'Test Title',
-      author: 'Test Author',
-      subject: 'Test Subject',
-      keywords: 'Test Keywords',
-      creator: 'test Creator'
-  });
+    switch(which) {
+      case 'b64': {
+        const filename:string = this.spreadsheet.title+'.xlsx';
+        // the excelIO save then call the secont argument method as callback
+        this.excelIO.save(jsonstr, (blob:Blob)=>{
+          // this method encode the blob into base64 string and then return the blob with encoding and base64string
+          // if you use saveAs on the base64encoded blob, it is decoded by file-save before being saved 
+          // so you have to create a text blob containing only the base64 string and then save it as text file
+          this.blobToBase64(blob, (baseBlob, base64str)=>{
+            console.log(base64str); 
+            console.log(baseBlob);
+            let b64Blob = new Blob([base64str], {type: "text/plain;charset=utf-8"});
+            saveAs(b64Blob, "base64.txt");
+          });
+        }, function (e) {
+          console.log(e);
+        });
+        break;
+      }
+      case 'xlsx': {
+        const filename:string = this.spreadsheet.title+'.xlsx';
+        this.excelIO.save(jsonstr, (blob:Blob)=>{
+          saveAs(blob, filename);
+          //saveAs(blob, filename);
+        }, function (e) {
+          console.log(e);
+        });
+        break;
+      }
+      case 'pdf': {
+        const filename:string = this.spreadsheet.title+'.pdf';
+        var printInfo: GC.Spread.Sheets.Print.PrintInfo = this.spread.getActiveSheet().printInfo();
+        /*
+        printInfo.columnStart(0); // PrintArea TODO
+        printInfo.columnEnd(3);   // PrintArea TODO
+        printInfo.rowStart(0);    // PrintArea TODO
+        printInfo.rowEnd(3);      // PrintArea TODO
+        */
+        printInfo.showGridLine(false);
+        printInfo.showRowHeader(GC.Spread.Sheets.Print.PrintVisibilityType.hide);
+        printInfo.showColumnHeader(GC.Spread.Sheets.Print.PrintVisibilityType.hide);
+        const jsonstr:string = JSON.stringify(this.spread.toJSON());
+        
+        this.spread.savePDF(function (blob) {
+          saveAs(blob, filename);
+        }, function (error) {
+          console.log(error);
+        }, {
+          title: 'Test Title',
+          author: 'Test Author',
+          subject: 'Test Subject',
+          keywords: 'Test Keywords',
+          creator: 'test Creator'
+        });
+        break;
+      }
+    }
   }
 
   sendMessage() {
