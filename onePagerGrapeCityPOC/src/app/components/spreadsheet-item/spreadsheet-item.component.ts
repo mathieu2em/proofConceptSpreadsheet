@@ -211,6 +211,7 @@ export class SpreadsheetItemComponent implements OnInit {
     this.setReadonly(this.spread);
 
     switch(which) {
+      // save a base64 encoded string containing the xlsx binary content
       case 'b64': {
         const filename:string = this.spreadsheet.title+'.xlsx';
         // the excelIO save then call the secont argument method as callback
@@ -229,16 +230,17 @@ export class SpreadsheetItemComponent implements OnInit {
         });
         break;
       }
+      // save a excel file as is 
       case 'xlsx': {
         const filename:string = this.spreadsheet.title+'.xlsx';
         this.excelIO.save(jsonstr, (blob:Blob)=>{
           saveAs(blob, filename);
-          //saveAs(blob, filename);
         }, function (e) {
           console.log(e);
         });
         break;
       }
+      // save into a pdf the spreadsheet
       case 'pdf': {
         const filename:string = this.spreadsheet.title+'.pdf';
         var printInfo: GC.Spread.Sheets.Print.PrintInfo = this.spread.getActiveSheet().printInfo();
@@ -248,6 +250,7 @@ export class SpreadsheetItemComponent implements OnInit {
         printInfo.rowStart(0);    // PrintArea TODO
         printInfo.rowEnd(3);      // PrintArea TODO
         */
+       // printInfo contains all the different format options for the pdf print
         printInfo.showGridLine(false);
         printInfo.showRowHeader(GC.Spread.Sheets.Print.PrintVisibilityType.hide);
         printInfo.showColumnHeader(GC.Spread.Sheets.Print.PrintVisibilityType.hide);
