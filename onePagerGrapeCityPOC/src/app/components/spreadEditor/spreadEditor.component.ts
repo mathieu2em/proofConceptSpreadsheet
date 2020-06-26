@@ -114,7 +114,7 @@ export class SpreadEditorComponent implements OnInit {
       if (this.spread && file) {
         this.excelIO.open(blob, (json) => {
           this.spread.fromJSON(json, {});
-          this.spread.getActiveSheet().options.isProtected=false;
+          this.unsetReadonly(this.spread);
           this.editableCells = [];
           setTimeout(() => {
             alert('load successfully');
@@ -250,6 +250,51 @@ export class SpreadEditorComponent implements OnInit {
     //spread.options.allowDynamicArray = false;
     //this.deactivateScrolling(sheet);
     //sheet.options.isProtected = true;
+  }
+
+  // set all the correct parameters for a usable read-only mode.
+  unsetReadonly(spread: GC.Spread.Sheets.Workbook):void{
+    const sheet:GC.Spread.Sheets.Worksheet = spread.getActiveSheet();
+    //Hide column headers.
+    sheet.options.colHeaderVisible = true;
+    //Hide row headers.
+    sheet.options.rowHeaderVisible = true;
+    spread.options.newTabVisible = true;
+    spread.options.showHorizontalScrollbar = true;
+    spread.options.showVerticalScrollbar = true;
+    spread.options.tabStripVisible = true;
+    spread.options.allowUserDragMerge = true;
+    spread.options.allowAutoCreateHyperlink = true;
+    spread.options.allowContextMenu = true;
+    spread.options.allowDynamicArray = true;
+    spread.options.allowSheetReorder = true;
+    spread.options.allowUserDragFill = true;
+    spread.options.allowUserDragMerge = true;
+    spread.options.allowUserResize = true;
+    spread.options.allowCopyPasteExcelStyle = true;
+    sheet.options.isProtected = false;
+    this.reactivateScrolling(sheet);
+    sheet.options.protectionOptions = {
+      allowSelectLockedCells : true,
+      allowSelectUnlockedCells : true,
+      allowSort : true,
+      allowFilter : true,
+      allowEditObjects : true,
+      allowResizeRows : true,
+      allowResizeColumns : true,
+      allowDeleteColumns : true,
+      allowDeleteRows : true,
+      allowDragInsertColumns : true,
+      allowDragInsertRows : true,
+      allowInsertColumns : true,
+      allowInsertRows : true,
+    }
+    sheet.setActiveCell(null,null); // gives an error but the only way I found not to show any active cell in the readonly ... bruh
+  }
+
+  reactivateScrolling(sheet:GC.Spread.Sheets.Worksheet):void{
+    sheet.frozenRowCount(0);
+    sheet.frozenColumnCount(0);
   }
 
   // add the selected cell to an array that will be used as a selection 
