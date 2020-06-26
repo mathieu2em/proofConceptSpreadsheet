@@ -74,34 +74,47 @@ export class SpreadEditorComponent implements OnInit {
   }
 
   // make sure to have the header stuff
+  // takes a base64 encoded string file and parse it properly
+  // so that you get a Blob from string file
   base64ToBlob(base64Data, contentType):Blob {
-      contentType = contentType || '';
-      let sliceSize:number = 1024;
-      let byteCharacters:string = atob(base64Data);
-      let bytesLength:number = byteCharacters.length;
-      let slicesCount:number = Math.ceil(bytesLength / sliceSize);
-      let byteArrays = new Array(slicesCount);
-      for (let sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
-          let begin = sliceIndex * sliceSize;
-          let end = Math.min(begin + sliceSize, bytesLength);
-  
-          let bytes = new Array(end - begin);
-          for (let offset:number = begin, i:number = 0; offset < end; ++i, ++offset) {
-              bytes[i] = byteCharacters[offset].charCodeAt(0);
-          }
-          byteArrays[sliceIndex] = new Uint8Array(bytes);
+
+    // content type cant be null
+    contentType = contentType || '';
+    // size of slices
+    let sliceSize:number = 1024;
+    // atob is a base64 decoder
+    let byteCharacters:string = atob(base64Data);
+    // can differ on certain systems
+    let bytesLength:number = byteCharacters.length;
+    // we have to count how many slices we have for the ByteArray to be correctly separated 
+    // for the bytes 
+    let slicesCount:number = Math.ceil(bytesLength / sliceSize);
+    let byteArrays = new Array(slicesCount);
+    // now we put the bytes correctly in the byte array
+    for (let sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+      let begin:number = sliceIndex * sliceSize;
+      let end:number = Math.min(begin + sliceSize, bytesLength);
+      let bytes = new Array(end - begin);
+      for (let offset:number = begin, i:number = 0; offset < end; ++i, ++offset) {
+        bytes[i] = byteCharacters[offset].charCodeAt(0);
       }
-      return new Blob(byteArrays, { type: contentType });
+      byteArrays[sliceIndex] = new Uint8Array(bytes);
+    }
+    return new Blob(byteArrays, { type: contentType });
   }
 
   onClickMeImportB64(args):void {
+    // extract file elements from event
     const file: File = args.srcElement && args.srcElement.files && args.srcElement.files[0];
+
     let fileReader = new FileReader();
+    // read the file and then calls onload method, decode base64 string to byteArray, put it in the blob and load the blob with excelIO
     fileReader.onload = (e) => {
       let blob:Blob = this.base64ToBlob(fileReader.result, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       if (this.spread && file) {
         this.excelIO.open(blob, (json) => {
           this.spread.fromJSON(json, {});
+          this.spread.getActiveSheet().options.isProtected=false;
           this.editableCells = [];
           setTimeout(() => {
             alert('load successfully');
