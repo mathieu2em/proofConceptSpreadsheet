@@ -159,7 +159,10 @@ export class SpreadsheetItemComponent implements OnInit {
     }
   }
 
-  // base64 converter for the blob. use inside the excelio method
+  // base64 converter for the excel blob. use inside the excelio method
+  // if you save the string internally you shoud only keep b64string
+  // if you save the string to a file using saveAs from file-save you should use 
+  // b64 blob as it gives the file headers 
   blobToBase64(blob, callback): void {
     let reader: FileReader = new FileReader();
     reader.onload = ()=>{
@@ -170,22 +173,21 @@ export class SpreadsheetItemComponent implements OnInit {
     reader.readAsDataURL(blob);
   };
 
-  // make sure to have the header stuff
-  Base64ToXLSXBlob(b64str){
-    const contentType = "";
-  }
-
   onClickMeB64(args):void {
     const filename:string = this.spreadsheet.title+'.txt';
     const jsonstr:string = JSON.stringify(this.spread.toJSON());
 
+    // the excelIO save then call the secont argument method as callback
     this.excelIO.save(jsonstr, (blob:Blob)=>{
-      this.blobToBase64(blob, (b64blob, base64str)=>{
-        console.log(base64str);
-        console.log(b64blob);
-        saveAs(b64blob, "base64.txt");
+      // this method encode the blob into base64 string and then return the blob with encoding and base64string
+      // if you use saveAs on the base64encoded blob, it is decoded by file-save before being saved 
+      // so you have to create a text blob containing only the base64 string and then save it as text file
+      this.blobToBase64(blob, (baseBlob, base64str)=>{
+        console.log(base64str); 
+        console.log(baseBlob);
+        let b64Blob = new Blob([base64str], {type: "text/plain;charset=utf-8"});
+        saveAs(b64Blob, "base64.txt");
       });
-      //saveAs(blob, filename);
     }, function (e) {
       console.log(e);
     });

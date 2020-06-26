@@ -73,21 +73,46 @@ export class SpreadEditorComponent implements OnInit {
     }
   }
 
+  // make sure to have the header stuff
+  base64ToBlob(base64Data, contentType):Blob {
+      contentType = contentType || '';
+      let sliceSize:number = 1024;
+      let byteCharacters:string = atob(base64Data);
+      let bytesLength:number = byteCharacters.length;
+      let slicesCount:number = Math.ceil(bytesLength / sliceSize);
+      let byteArrays = new Array(slicesCount);
+      for (let sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+          let begin = sliceIndex * sliceSize;
+          let end = Math.min(begin + sliceSize, bytesLength);
+  
+          let bytes = new Array(end - begin);
+          for (let offset:number = begin, i:number = 0; offset < end; ++i, ++offset) {
+              bytes[i] = byteCharacters[offset].charCodeAt(0);
+          }
+          byteArrays[sliceIndex] = new Uint8Array(bytes);
+      }
+      return new Blob(byteArrays, { type: contentType });
+  }
+
   onClickMeImportB64(args):void {
     const file: File = args.srcElement && args.srcElement.files && args.srcElement.files[0];
-    
-
-    if (this.spread && file) {
-      this.excelIO.open(file, (json) => {
-        this.spread.fromJSON(json, {});
-        this.editableCells = [];
-        setTimeout(() => {
-          alert('load successfully');
-        }, 0);
-      }, (error) => {
-        alert('load fail');
-      });
+    let fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      let blob:Blob = this.base64ToBlob(fileReader.result, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      if (this.spread && file) {
+        this.excelIO.open(blob, (json) => {
+          this.spread.fromJSON(json, {});
+          this.editableCells = [];
+          setTimeout(() => {
+            alert('load successfully');
+          }, 0);
+        }, (error) => {
+          alert('load fail');
+        });
+      }
+      console.log();
     }
+    fileReader.readAsText(file);
   }
 
   goToComponentB(passedObj: Object): void {
