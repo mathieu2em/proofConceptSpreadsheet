@@ -213,7 +213,7 @@ export class SpreadsheetItemComponent implements OnInit {
     switch(which) {
       // save a base64 encoded string containing the xlsx binary content
       case 'b64': {
-        const filename:string = this.spreadsheet.title+'.xlsx';
+        const filename:string = this.spreadsheet.title+'.txt';
         const activeSheet = this.spread.getActiveSheet();
         let printInfo: GC.Spread.Sheets.Print.PrintInfo = activeSheet.printInfo();
         printInfo.columnStart(0); // PrintArea
@@ -223,17 +223,17 @@ export class SpreadsheetItemComponent implements OnInit {
         activeSheet.printInfo(printInfo);
         this.spread.print(0);
         // the excelIO save then call the secont argument method as callback
-        this.excelIO.save(jsonstr, (blob:Blob)=>{
+        this.excelIO.save(jsonstr, (blob:Blob) => {
           // this method encode the blob into base64 string and then return the blob with encoding and base64string
           // if you use saveAs on the base64encoded blob, it is decoded by file-save before being saved 
           // so you have to create a text blob containing only the base64 string and then save it as text file
-          this.blobToBase64(blob, (baseBlob, base64str)=>{
+          this.blobToBase64(blob, (baseBlob, base64str) => {
             console.log(base64str); 
             console.log(baseBlob);
             let b64Blob = new Blob([base64str], {type: "text/plain;charset=utf-8"});
-            saveAs(b64Blob, "base64.txt");
+            saveAs(b64Blob, filename);
           });
-        }, function (e) {
+        }, (e) => {
           console.log(e);
         });
         break;
@@ -241,9 +241,9 @@ export class SpreadsheetItemComponent implements OnInit {
       // save a excel file as is 
       case 'xlsx': {
         const filename:string = this.spreadsheet.title+'.xlsx';
-        this.excelIO.save(jsonstr, (blob:Blob)=>{
+        this.excelIO.save(jsonstr, (blob:Blob) => {
           saveAs(blob, filename);
-        }, function (e) {
+        }, (e) => {
           console.log(e);
         });
         break;
@@ -253,10 +253,10 @@ export class SpreadsheetItemComponent implements OnInit {
         const filename:string = this.spreadsheet.title+'.pdf';
         const activeSheet = this.spread.getActiveSheet();
         var printInfo: GC.Spread.Sheets.Print.PrintInfo = activeSheet.printInfo();
-        printInfo.columnStart(0); // PrintArea
-        printInfo.columnEnd(activeSheet.getColumnCount());   // PrintArea
-        printInfo.rowStart(0);    // PrintArea
-        printInfo.rowEnd(activeSheet.getRowCount());      // PrintArea
+        printInfo.columnStart(0);                          // PrintArea
+        printInfo.columnEnd(activeSheet.getColumnCount()); // PrintArea
+        printInfo.rowStart(0);                             // PrintArea
+        printInfo.rowEnd(activeSheet.getRowCount());       // PrintArea
        // printInfo contains all the different format options for the pdf print
         printInfo.showGridLine(false);
         printInfo.showRowHeader(GC.Spread.Sheets.Print.PrintVisibilityType.hide);
